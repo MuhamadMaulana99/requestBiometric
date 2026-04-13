@@ -1,0 +1,114 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .wrap { padding: 1.5rem 0; }
+  h2 { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin: 1.5rem 0 0.75rem; }
+  h2:first-child { margin-top: 0; }
+  .section-label { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; margin-bottom: 0.75rem; }
+  .label-common { background: #EEEDFE; color: #3C3489; }
+  .label-specific { background: #E1F5EE; color: #085041; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  thead th { background: var(--color-background-secondary); font-weight: 500; font-size: 12px; color: var(--color-text-secondary); text-align: left; padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  tbody td { padding: 9px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); vertical-align: top; color: var(--color-text-primary); line-height: 1.5; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--color-background-secondary); }
+  .feat-name { font-weight: 500; color: var(--color-text-primary); }
+  .sub { color: var(--color-text-secondary); font-size: 12px; margin-top: 2px; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; margin: 2px 2px 2px 0; white-space: nowrap; }
+  .b-face { background: #E6F1FB; color: #0C447C; }
+  .b-fp   { background: #FAEEDA; color: #633806; }
+  .b-iris { background: #EEEDFE; color: #3C3489; }
+  .b-all  { background: #EAF3DE; color: #27500A; }
+  .io-chip { display: inline-block; font-size: 11px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; padding: 1px 6px; margin: 2px 2px 2px 0; color: var(--color-text-secondary); }
+  .arrow { color: var(--color-text-tertiary); font-size: 11px; margin: 0 2px; }
+  .num { width: 28px; color: var(--color-text-tertiary); font-size: 12px; }
+  .divider { height: 1.5rem; }
+</style>
+
+<div class="wrap">
+  <span class="section-label label-common">Common — all biometrics</span>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:28px">#</th>
+        <th style="width:175px">Feature</th>
+        <th style="width:220px">Input</th>
+        <th style="width:190px">Output</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td><div class="feat-name">Extraction</div></td>
+        <td><span class="io-chip">image</span></td>
+        <td><span class="io-chip">template</span></td>
+        <td>Converts raw biometric image into a compact, comparable feature template</td>
+      </tr>
+      <tr>
+        <td class="num">2a</td>
+        <td><div class="feat-name">Identification</div><div class="sub">Identify one (1:N)</div></td>
+        <td><span class="io-chip">image</span> or <span class="io-chip">template</span></td>
+        <td><span class="io-chip">person data</span></td>
+        <td>Returns best match from the enrolled database</td>
+      </tr>
+      <tr>
+        <td class="num">2b</td>
+        <td><div class="feat-name">Identification</div><div class="sub">Identify many (1:N top-k)</div></td>
+        <td><span class="io-chip">image / template</span> <span class="io-chip">k: number</span></td>
+        <td><span class="io-chip">persons data[]</span></td>
+        <td>Returns ranked list of top-k candidate matches with similarity scores</td>
+      </tr>
+      <tr>
+        <td class="num">3a</td>
+        <td><div class="feat-name">Verification</div><div class="sub">Verify by NIK (1:1)</div></td>
+        <td><span class="io-chip">NIK</span> <span class="io-chip">image / template</span></td>
+        <td><span class="io-chip">match: bool</span> <span class="io-chip">score</span></td>
+        <td>Confirms claimed identity against a specific enrolled record by national ID</td>
+      </tr>
+      <tr>
+        <td class="num">3b</td>
+        <td><div class="feat-name">Verification</div><div class="sub">Verify biometric (1:1)</div></td>
+        <td><span class="io-chip">image vs image</span> or <span class="io-chip">image vs tmpl</span> or <span class="io-chip">tmpl vs tmpl</span></td>
+        <td><span class="io-chip">match: bool</span> <span class="io-chip">score</span></td>
+        <td>Direct comparison of two biometric samples without involving the database</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td><div class="feat-name">Quality check</div></td>
+        <td><span class="io-chip">image</span></td>
+        <td><span class="io-chip">quality score</span> <span class="io-chip">params</span></td>
+        <td>Assesses image quality (sharpness, contrast, lighting, resolution) before processing</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td><div class="feat-name">Registration</div></td>
+        <td><span class="io-chip">NIK / person ID</span> <span class="io-chip">image / template</span></td>
+        <td><span class="io-chip">enrollment ID</span> <span class="io-chip">status</span></td>
+        <td>Enrolls a new biometric record; should run quality check and deduplication first</td>
+      </tr>
+      <tr>
+        <td class="num">6</td>
+        <td><div class="feat-name">Update biometric</div></td>
+        <td><span class="io-chip">NIK / person ID</span> <span class="io-chip">new image / template</span></td>
+        <td><span class="io-chip">status</span></td>
+        <td>Replaces or appends a new biometric sample to an existing enrolled record</td>
+      </tr>
+      <tr>
+        <td class="num">7</td>
+        <td><div class="feat-name">Delete biometric</div></td>
+        <td><span class="io-chip">NIK / person ID</span></td>
+        <td><span class="io-chip">status</span></td>
+        <td>Removes enrolled biometric data; important for GDPR / right-to-erasure compliance</td>
+      </tr>
+      <tr>
+        <td class="num">8</td>
+        <td><div class="feat-name">Deduplication check</div></td>
+        <td><span class="io-chip">image / template</span></td>
+        <td><span class="io-chip">duplicate flag</span> <span class="io-chip">matched IDs[]</span></td>
+        <td>Checks if a biometric already exists in the database before enrollment to prevent duplicates</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
